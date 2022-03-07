@@ -60,7 +60,7 @@ vector<Adresat>wczytajOsobyZPliku()
     unsigned char c;
 
     fstream plik;
-    plik.open("ksiazka.txt", ios::in);
+    plik.open("Adresaci.txt", ios::in);
 
     if(plik.good()!=false)
 
@@ -286,7 +286,7 @@ void edytujOsobe (char wybor, vector<Adresat> &adresaci)
 void zapisDoPliku (vector<Adresat> &adresaci)
 {
     ofstream plik;
-    plik.open("ksiazka.txt", ios::out);
+    plik.open("Adresaci.txt", ios::out);
     if (plik.good()==true)
     {
         for (int i=0; i<adresaci.size(); i++)
@@ -302,14 +302,139 @@ void zapisDoPliku (vector<Adresat> &adresaci)
     }
 }
 
+struct Uzytkownik
+{
+    int id=0;
+    string nazwa, haslo;
+};
 
-int main()
+vector<Uzytkownik>wczytajUzytkownikowZPliku()
+{
+    vector<Uzytkownik> uzytkownicy;
+    Uzytkownik uzytkownik;
+    system("cls");
+    string linia,zastepczy;
+    unsigned char c;
+
+    fstream plik;
+    plik.open("Uzytkownicy.txt", ios::in);
+
+    if(plik.good()!=false)
+
+    {
+        zastepczy = "";
+
+        while (getline(plik,linia))
+        {
+            int ileDanych=1;
+            linia += " ";
+
+            for(int i = 0; i < linia.size(); i++ )
+            {
+                c = linia[ i ];
+
+                if( c != '|')
+                    zastepczy += c;
+                else if( zastepczy != "" )
+                {
+                    if(ileDanych==1)
+                        uzytkownik.id=atoi(zastepczy.c_str());
+                    if(ileDanych==2)
+                        uzytkownik.nazwa=zastepczy;
+                    if(ileDanych==3)
+                        uzytkownik.haslo=zastepczy;
+                    ileDanych++;
+                    zastepczy = "";
+                }
+            }
+            uzytkownicy.push_back(uzytkownik);
+        }
+
+    }
+    plik.close();
+    return uzytkownicy;
+
+}
+
+void zarejestrujUzytkownika (vector<Uzytkownik> &uzytkownicy)
+{
+    system("cls");
+    Uzytkownik uzytkownik;
+    string nazwa, haslo;
+
+    int IDuzytkownika=1;
+    if (uzytkownicy.size()>0)
+        IDuzytkownika=uzytkownicy.size()+1;
+
+    cout<<"Podaj nazwe uzytkownika: ";
+    cin>>nazwa;
+
+    cout<<"Podaj haslo: ";
+    cin>>haslo;
+
+    uzytkownik.id = IDuzytkownika;
+    uzytkownik.nazwa = nazwa;
+    uzytkownik.haslo = haslo;
+    uzytkownicy.push_back(uzytkownik);
+
+    cout<<"Uzytkownik zostal zarejestrowany."<<endl;
+    Sleep(1500);
+}
+
+int zalogujUzytkownika (vector<Uzytkownik> &uzytkownicy)
+{
+    system("cls");
+    string nazwa, haslo;
+    cout<<"Podaj nazwe: ";
+    cin>>nazwa;
+    for(int i=0; i<uzytkownicy.size(); i++)
+    {
+        if (uzytkownicy[i].nazwa==nazwa)
+        {
+            for (int j=0; j<3; j++)
+            {
+                cout<<"Podaj haslo: ";
+                cin>>haslo;
+                if (uzytkownicy[i].haslo==haslo)
+                {
+                    cout<<"Zalogowales sie."<<endl;
+                    Sleep(1000);
+                    return uzytkownicy[i].id;
+                }
+
+            }
+            cout<<"Podales 3 razy bledne haslo. Poczekaj 3 sekundy przed nastepna probe.";
+            Sleep(3000);
+            return 0;
+        }
+    }
+    cout<<"Nie ma uzytkownika z takim loginem."<<endl;
+    Sleep(1500);
+    return 0;
+}
+
+
+void zapisDoPliku (vector<Uzytkownik> &uzytkownicy)
+{
+    ofstream plik;
+    plik.open("Uzytkownicy.txt", ios::out);
+    if (plik.good()==true)
+    {
+        for (int i=0; i<uzytkownicy.size(); i++)
+        {
+            plik<<uzytkownicy[i].id<<"|";
+            plik<<uzytkownicy[i].nazwa<<"|";
+            plik<<uzytkownicy[i].haslo<<"|"<<endl;
+        }
+        plik.close();
+    }
+}
+
+void przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
 {
     vector <Adresat>adresaci;
     string wyszukiwaneImie, wyszukiwaneNazwisko;
     adresaci=wczytajOsobyZPliku();
-
-
     char wybor;
 
     while (1)
@@ -413,6 +538,60 @@ int main()
             Sleep(1500);
         }
     }
+}
+
+
+int main()
+{
+
+
+    vector <Uzytkownik>uzytkownicy;
+    uzytkownicy=wczytajUzytkownikowZPliku();
+    int IDzalogowanegoUzytkownika=0;
+
+    char wybor;
+
+    while (1)
+    {
+        system("cls");
+        cout<<uzytkownicy.size()<<endl;
+
+        cout<<"1.Rejestracja uzytkownika"<<endl;
+        cout<<"2.Logowanie uzytkownika"<<endl;
+        cout<<"3.Zakoncz program"<<endl;
+        cout<<"Twoj wybor: ";
+        cin>>wybor;
+
+        switch(wybor)
+        {
+        case '1':
+        {
+            zarejestrujUzytkownika (uzytkownicy);
+            zapisDoPliku(uzytkownicy);
+        }
+        break;
+
+        case '2':
+        {
+            IDzalogowanegoUzytkownika=zalogujUzytkownika(uzytkownicy);
+            if (IDzalogowanegoUzytkownika!=0)
+            {
+                przejdzDoKsiazkiAdresowej(IDzalogowanegoUzytkownika);
+            }
+        }
+        break;
+
+
+        case '3':
+        {
+            exit(0);
+        }
+        break;
+        }
+    }
+
+
+
 
 
 
