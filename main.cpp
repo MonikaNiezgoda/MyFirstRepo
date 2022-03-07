@@ -320,7 +320,6 @@ vector<Uzytkownik>wczytajUzytkownikowZPliku()
     plik.open("Uzytkownicy.txt", ios::in);
 
     if(plik.good()!=false)
-
     {
         zastepczy = "";
 
@@ -349,11 +348,9 @@ vector<Uzytkownik>wczytajUzytkownikowZPliku()
             }
             uzytkownicy.push_back(uzytkownik);
         }
-
     }
     plik.close();
     return uzytkownicy;
-
 }
 
 void zarejestrujUzytkownika (vector<Uzytkownik> &uzytkownicy)
@@ -401,7 +398,6 @@ int zalogujUzytkownika (vector<Uzytkownik> &uzytkownicy)
                     Sleep(1000);
                     return uzytkownicy[i].id;
                 }
-
             }
             cout<<"Podales 3 razy bledne haslo. Poczekaj 3 sekundy przed nastepna probe.";
             Sleep(3000);
@@ -412,7 +408,6 @@ int zalogujUzytkownika (vector<Uzytkownik> &uzytkownicy)
     Sleep(1500);
     return 0;
 }
-
 
 void zapisDoPliku (vector<Uzytkownik> &uzytkownicy)
 {
@@ -430,7 +425,7 @@ void zapisDoPliku (vector<Uzytkownik> &uzytkownicy)
     }
 }
 
-void przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
+int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
 {
     vector <Adresat>adresaci;
     string wyszukiwaneImie, wyszukiwaneNazwisko;
@@ -451,8 +446,6 @@ void przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
         cout<<"Twoj wybor: ";
         cin>>wybor;
 
-
-
         switch(wybor)
         {
         case '1':
@@ -461,7 +454,6 @@ void przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
             zapisDoPliku(adresaci);
         }
         break;
-
         case '2':
         {
             system("cls");
@@ -473,7 +465,6 @@ void przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
 
         }
         break;
-
         case '3':
         {
             system("cls");
@@ -484,13 +475,10 @@ void przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
             wyszukajPoNazwisku (wyszukiwaneNazwisko,adresaci);
         }
         break;
-
         case '4':
         {
              wyswietlWszystkieOsoby (adresaci);
         }
-
-
         break;
         case '5':
         {
@@ -529,7 +517,7 @@ void przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
         break;
         case '9':
         {
-            exit(0);
+            return 0;
         }
         break;
 
@@ -543,8 +531,6 @@ void przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
 
 int main()
 {
-
-
     vector <Uzytkownik>uzytkownicy;
     uzytkownicy=wczytajUzytkownikowZPliku();
     int IDzalogowanegoUzytkownika=0;
@@ -554,8 +540,6 @@ int main()
     while (1)
     {
         system("cls");
-        cout<<uzytkownicy.size()<<endl;
-
         cout<<"1.Rejestracja uzytkownika"<<endl;
         cout<<"2.Logowanie uzytkownika"<<endl;
         cout<<"3.Zakoncz program"<<endl;
@@ -581,7 +565,6 @@ int main()
         }
         break;
 
-
         case '3':
         {
             exit(0);
@@ -589,11 +572,5 @@ int main()
         break;
         }
     }
-
-
-
-
-
-
     return 0;
 }
