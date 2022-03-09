@@ -14,6 +14,12 @@ struct Adresat
     string imie, nazwisko, email, adres, nrTel;
 };
 
+struct Uzytkownik
+{
+    int id=0;
+    string nazwa, haslo;
+};
+
 void wpiszOsobyDoKsiazki (vector<Adresat> &adresaci)
 {
     system("cls");
@@ -283,7 +289,7 @@ void edytujOsobe (char wybor, vector<Adresat> &adresaci)
     }
 }
 
-void zapisDoPlikuAdresatow (vector<Adresat> &adresaci)
+void zapisDoPlikuAdresatow (vector<Adresat> &adresaci, int IdUzytkownika)
 {
     ofstream plik;
     plik.open("Adresaci.txt", ios::out);
@@ -291,6 +297,7 @@ void zapisDoPlikuAdresatow (vector<Adresat> &adresaci)
     {
         for (int i=0; i<adresaci.size(); i++)
         {
+            plik<<IdUzytkownika<<"|";
             plik<<adresaci[i].id<<"|";
             plik<<adresaci[i].imie<<"|";
             plik<<adresaci[i].nazwisko<<"|";
@@ -301,12 +308,6 @@ void zapisDoPlikuAdresatow (vector<Adresat> &adresaci)
         plik.close();
     }
 }
-
-struct Uzytkownik
-{
-    int id=0;
-    string nazwa, haslo;
-};
 
 vector<Uzytkownik>wczytajUzytkownikowZPliku()
 {
@@ -427,6 +428,7 @@ void zapisDoPlikuUzytkownikow (vector<Uzytkownik> &uzytkownicy)
 void zmianaHasla (int IDzalogowanegoUzytkownika, vector<Uzytkownik> &uzytkownicy)
 {
     string noweHaslo;
+    system("cls");
     cout<<"Podaj nowe haslo: ";
     cin>>noweHaslo;
     uzytkownicy[IDzalogowanegoUzytkownika-1].haslo=noweHaslo;
@@ -442,6 +444,7 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik>
     while (1)
     {
         system("cls");
+        cout<<IDzalogowanegoUzytkownika<<endl;
 
         cout<<"1.Dodaj adresata"<<endl;
         cout<<"2.Wyszukaj po imieniu"<<endl;
@@ -454,12 +457,13 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik>
         cout<<"Twoj wybor: ";
         cin>>wybor;
 
+
         switch(wybor)
         {
         case '1':
         {
             wpiszOsobyDoKsiazki (adresaci);
-            zapisDoPlikuAdresatow(adresaci);
+            zapisDoPlikuAdresatow(adresaci, IDzalogowanegoUzytkownika);
         }
         break;
         case '2':
@@ -496,7 +500,7 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik>
             cout<<"Wpisz ID osoby, ktora chcesz usunac: ";
             cin>>IDosobyDoUsuniecia;
             usunOsobe (IDosobyDoUsuniecia, adresaci);
-            zapisDoPlikuAdresatow (adresaci);
+            zapisDoPlikuAdresatow (adresaci, IDzalogowanegoUzytkownika);
 
         }
         break;
@@ -520,7 +524,7 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik>
             }
             else
                 edytujOsobe (wyborEdycji, adresaci);
-                zapisDoPlikuAdresatow(adresaci);
+                zapisDoPlikuAdresatow(adresaci, IDzalogowanegoUzytkownika);
         }
         break;
         case '7':
