@@ -283,7 +283,7 @@ void edytujOsobe (char wybor, vector<Adresat> &adresaci)
     }
 }
 
-void zapisDoPliku (vector<Adresat> &adresaci)
+void zapisDoPlikuAdresatow (vector<Adresat> &adresaci)
 {
     ofstream plik;
     plik.open("Adresaci.txt", ios::out);
@@ -409,7 +409,7 @@ int zalogujUzytkownika (vector<Uzytkownik> &uzytkownicy)
     return 0;
 }
 
-void zapisDoPliku (vector<Uzytkownik> &uzytkownicy)
+void zapisDoPlikuUzytkownikow (vector<Uzytkownik> &uzytkownicy)
 {
     ofstream plik;
     plik.open("Uzytkownicy.txt", ios::out);
@@ -424,11 +424,18 @@ void zapisDoPliku (vector<Uzytkownik> &uzytkownicy)
         plik.close();
     }
 }
+void zmianaHasla (int IDzalogowanegoUzytkownika, vector<Uzytkownik> &uzytkownicy)
+{
+    string noweHaslo;
+    cout<<"Podaj nowe haslo: ";
+    cin>>noweHaslo;
+    uzytkownicy[IDzalogowanegoUzytkownika-1].haslo=noweHaslo;
+}
 
-int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
+int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik> &uzytkownicy)
 {
     vector <Adresat>adresaci;
-    string wyszukiwaneImie, wyszukiwaneNazwisko;
+    string wyszukiwaneImie, wyszukiwaneNazwisko, noweHaslo;
     adresaci=wczytajOsobyZPliku();
     char wybor;
 
@@ -452,7 +459,7 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
         case '1':
         {
             wpiszOsobyDoKsiazki (adresaci);
-            zapisDoPliku(adresaci);
+            zapisDoPlikuAdresatow(adresaci);
         }
         break;
         case '2':
@@ -489,7 +496,7 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
             cout<<"Wpisz ID osoby, ktora chcesz usunac: ";
             cin>>IDosobyDoUsuniecia;
             usunOsobe (IDosobyDoUsuniecia, adresaci);
-            zapisDoPliku (adresaci);
+            zapisDoPlikuAdresatow (adresaci);
 
         }
         break;
@@ -513,9 +520,16 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
             }
             else
                 edytujOsobe (wyborEdycji, adresaci);
-                zapisDoPliku (adresaci);
+                zapisDoPlikuAdresatow(adresaci);
         }
         break;
+        case '7':
+        {
+            zmianaHasla(IDzalogowanegoUzytkownika, uzytkownicy);
+            zapisDoPlikuUzytkownikow(uzytkownicy);
+
+        }
+
         case '8':
         {
             return 0;
@@ -528,6 +542,8 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
         }
     }
 }
+
+
 
 
 int main()
@@ -552,7 +568,7 @@ int main()
         case '1':
         {
             zarejestrujUzytkownika (uzytkownicy);
-            zapisDoPliku(uzytkownicy);
+            zapisDoPlikuUzytkownikow(uzytkownicy);
         }
         break;
 
@@ -561,7 +577,7 @@ int main()
             IDzalogowanegoUzytkownika=zalogujUzytkownika(uzytkownicy);
             if (IDzalogowanegoUzytkownika!=0)
             {
-                przejdzDoKsiazkiAdresowej(IDzalogowanegoUzytkownika);
+                przejdzDoKsiazkiAdresowej(IDzalogowanegoUzytkownika, uzytkownicy);
             }
         }
         break;
