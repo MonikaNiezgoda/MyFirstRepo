@@ -442,7 +442,8 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
         cout<<"4.Wyswietl wszystkich adresatow"<<endl;
         cout<<"5.Usun adresata"<<endl;
         cout<<"6.Edytuj adresata"<<endl;
-        cout<<"9.Zakoncz program"<<endl;
+        cout<<"7.Zmien haslo"<<endl;
+        cout<<"8.Wyloguj sie"<<endl;
         cout<<"Twoj wybor: ";
         cin>>wybor;
 
@@ -515,7 +516,7 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika)
                 zapisDoPliku (adresaci);
         }
         break;
-        case '9':
+        case '8':
         {
             return 0;
         }
