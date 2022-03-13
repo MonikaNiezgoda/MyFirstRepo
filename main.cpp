@@ -163,7 +163,7 @@ void wyszukajPoNazwisku (string wyszukiwaneNazwisko, vector<Adresat> &adresaci)
     getch();
 }
 
-void wyswietlWszystkieOsoby (vector<Adresat> &adresaci)
+void wyswietlWszystkieOsoby (vector<Adresat> &adresaci, int IDuzytkownika)
 {
     system("cls");
     if (adresaci.size()==0)
@@ -173,19 +173,22 @@ void wyswietlWszystkieOsoby (vector<Adresat> &adresaci)
     }
     else
     {
-        for(int i=0; i<adresaci.size(); i++ )
+        for (int i=0; i<adresaci.size(); i++)
         {
-            cout<<"ID: "<<adresaci[i].id<<endl;
-            cout<<adresaci[i].imie<<" "<<adresaci[i].nazwisko<<endl;
-            cout<<"Adres: "<<adresaci[i].adres<<endl;
-            cout<<"Email: "<<adresaci[i].email<<endl;
-            cout<<"Telefon: "<<adresaci[i].nrTel<<endl;
-            cout<<endl;
+            if (adresaci[i].idUzytkownika==IDuzytkownika)
+            {
+                cout<<"ID: "<<adresaci[i].id<<endl;
+                cout<<adresaci[i].imie<<" "<<adresaci[i].nazwisko<<endl;
+                cout<<"Adres: "<<adresaci[i].adres<<endl;
+                cout<<"Email: "<<adresaci[i].email<<endl;
+                cout<<"Telefon: "<<adresaci[i].nrTel<<endl;
+                cout<<endl;
+            }
         }
-        getch();
+         getch();
     }
-
 }
+
 void usunOsobe (int IDosobyDoUsuniecia, vector<Adresat> &adresaci)
 {
     char wybor;
@@ -489,7 +492,7 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik>
         break;
         case '4':
         {
-            wyswietlWszystkieOsoby (adresaci);
+            wyswietlWszystkieOsoby (adresaci, IDzalogowanegoUzytkownika);
         }
         break;
         case '5':
@@ -531,7 +534,6 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik>
         {
             zmianaHasla(IDzalogowanegoUzytkownika, uzytkownicy);
             zapisDoPlikuUzytkownikow(uzytkownicy);
-
         }
 
         case '8':
