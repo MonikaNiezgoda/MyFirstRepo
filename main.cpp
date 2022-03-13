@@ -10,7 +10,7 @@ using namespace std;
 
 struct Adresat
 {
-    int id=0;
+    int id=0, idUzytkownika;
     string imie, nazwisko, email, adres, nrTel;
 };
 
@@ -20,7 +20,7 @@ struct Uzytkownik
     string nazwa, haslo;
 };
 
-void wpiszOsobyDoKsiazki (vector<Adresat> &adresaci)
+void wpiszOsobyDoKsiazki (vector<Adresat> &adresaci, int IDZalogowanegoUzytkownika)
 {
     system("cls");
     Adresat adresat;
@@ -28,7 +28,7 @@ void wpiszOsobyDoKsiazki (vector<Adresat> &adresaci)
 
     int IDkolejnejOsoby=1;
     if (adresaci.size()>0)
-    IDkolejnejOsoby=(adresaci[adresaci.size()-1].id)+1;
+        IDkolejnejOsoby=(adresaci[adresaci.size()-1].id)+1;
 
     cout<<"Podaj imie: ";
     cin>>imie;
@@ -44,6 +44,7 @@ void wpiszOsobyDoKsiazki (vector<Adresat> &adresaci)
     getline(cin,nrTel);
 
     adresat.id = IDkolejnejOsoby;
+    adresat.idUzytkownika=IDZalogowanegoUzytkownika;
     adresat.imie = imie;
     adresat.nazwisko = nazwisko;
     adresat.adres = adres;
@@ -51,10 +52,10 @@ void wpiszOsobyDoKsiazki (vector<Adresat> &adresaci)
     adresat.nrTel = nrTel;
     adresaci.push_back(adresat);
 
-        cout<<"Osoba zostala wpisana do ksiazki adresowej."<<endl;
-        Sleep(1500);
+    cout<<"Osoba zostala wpisana do ksiazki adresowej."<<endl;
+    Sleep(1500);
 
-    }
+}
 
 
 vector<Adresat>wczytajOsobyZPliku()
@@ -89,14 +90,16 @@ vector<Adresat>wczytajOsobyZPliku()
                     if(ileDanych==1)
                         adresat.id=atoi(zastepczy.c_str());
                     if(ileDanych==2)
-                        adresat.imie=zastepczy;
+                        adresat.idUzytkownika=atoi(zastepczy.c_str());
                     if(ileDanych==3)
-                        adresat.nazwisko=zastepczy;
+                        adresat.imie=zastepczy;
                     if(ileDanych==4)
-                        adresat.adres=zastepczy;
+                        adresat.nazwisko=zastepczy;
                     if(ileDanych==5)
-                        adresat.email=zastepczy;
+                        adresat.adres=zastepczy;
                     if(ileDanych==6)
+                        adresat.email=zastepczy;
+                    if(ileDanych==7)
                         adresat.nrTel=zastepczy;
                     ileDanych++;
                     zastepczy = "";
@@ -104,10 +107,9 @@ vector<Adresat>wczytajOsobyZPliku()
             }
             adresaci.push_back(adresat);
         }
-
     }
-plik.close();
- return adresaci;
+    plik.close();
+    return adresaci;
 
 }
 
@@ -172,15 +174,15 @@ void wyswietlWszystkieOsoby (vector<Adresat> &adresaci)
     else
     {
         for(int i=0; i<adresaci.size(); i++ )
-    {
-        cout<<"ID: "<<adresaci[i].id<<endl;
-        cout<<adresaci[i].imie<<" "<<adresaci[i].nazwisko<<endl;
-        cout<<"Adres: "<<adresaci[i].adres<<endl;
-        cout<<"Email: "<<adresaci[i].email<<endl;
-        cout<<"Telefon: "<<adresaci[i].nrTel<<endl;
-        cout<<endl;
-    }
-    getch();
+        {
+            cout<<"ID: "<<adresaci[i].id<<endl;
+            cout<<adresaci[i].imie<<" "<<adresaci[i].nazwisko<<endl;
+            cout<<"Adres: "<<adresaci[i].adres<<endl;
+            cout<<"Email: "<<adresaci[i].email<<endl;
+            cout<<"Telefon: "<<adresaci[i].nrTel<<endl;
+            cout<<endl;
+        }
+        getch();
     }
 
 }
@@ -289,7 +291,7 @@ void edytujOsobe (char wybor, vector<Adresat> &adresaci)
     }
 }
 
-void zapisDoPlikuAdresatow (vector<Adresat> &adresaci, int IdUzytkownika)
+void zapisDoPlikuAdresatow (vector<Adresat> &adresaci)
 {
     ofstream plik;
     plik.open("Adresaci.txt", ios::out);
@@ -297,8 +299,8 @@ void zapisDoPlikuAdresatow (vector<Adresat> &adresaci, int IdUzytkownika)
     {
         for (int i=0; i<adresaci.size(); i++)
         {
-            plik<<IdUzytkownika<<"|";
             plik<<adresaci[i].id<<"|";
+            plik<<adresaci[i].idUzytkownika<<"|";
             plik<<adresaci[i].imie<<"|";
             plik<<adresaci[i].nazwisko<<"|";
             plik<<adresaci[i].adres<<"|";
@@ -444,8 +446,6 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik>
     while (1)
     {
         system("cls");
-        cout<<IDzalogowanegoUzytkownika<<endl;
-
         cout<<"1.Dodaj adresata"<<endl;
         cout<<"2.Wyszukaj po imieniu"<<endl;
         cout<<"3.Wyszukaj po nazwisku"<<endl;
@@ -462,8 +462,8 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik>
         {
         case '1':
         {
-            wpiszOsobyDoKsiazki (adresaci);
-            zapisDoPlikuAdresatow(adresaci, IDzalogowanegoUzytkownika);
+            wpiszOsobyDoKsiazki (adresaci,IDzalogowanegoUzytkownika);
+            zapisDoPlikuAdresatow(adresaci);
         }
         break;
         case '2':
@@ -489,7 +489,7 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik>
         break;
         case '4':
         {
-             wyswietlWszystkieOsoby (adresaci);
+            wyswietlWszystkieOsoby (adresaci);
         }
         break;
         case '5':
@@ -500,7 +500,7 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik>
             cout<<"Wpisz ID osoby, ktora chcesz usunac: ";
             cin>>IDosobyDoUsuniecia;
             usunOsobe (IDosobyDoUsuniecia, adresaci);
-            zapisDoPlikuAdresatow (adresaci, IDzalogowanegoUzytkownika);
+            zapisDoPlikuAdresatow (adresaci);
 
         }
         break;
@@ -524,7 +524,7 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik>
             }
             else
                 edytujOsobe (wyborEdycji, adresaci);
-                zapisDoPlikuAdresatow(adresaci, IDzalogowanegoUzytkownika);
+            zapisDoPlikuAdresatow(adresaci);
         }
         break;
         case '7':
