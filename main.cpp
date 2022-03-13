@@ -114,24 +114,27 @@ vector<Adresat>wczytajOsobyZPliku()
 }
 
 
-void wyszukajPoImieniu (string wyszukiwaneImie, vector<Adresat> &adresaci)
+void wyszukajPoImieniu (string wyszukiwaneImie, vector<Adresat> &adresaci, int IDuzytkownika)
 {
     int iloscZnalezionychOsob=0;
     for(int i=0; i<adresaci.size(); i++)
     {
-        size_t pozycja = adresaci[i].imie.find(wyszukiwaneImie);
-
-        if(pozycja!= string::npos)
+        if (adresaci[i].idUzytkownika==IDuzytkownika)
         {
-            int ZnalezioneImie = pozycja;
+            size_t pozycja = adresaci[i].imie.find(wyszukiwaneImie);
 
-            cout<<adresaci[i].imie<<endl;
-            cout<<adresaci[i].nazwisko<<endl;
-            cout<<adresaci[i].adres<<endl;
-            cout<<adresaci[i].email<<endl;
-            cout<<adresaci[i].nrTel<<endl;
-            cout<<endl;
-            iloscZnalezionychOsob++;
+            if(pozycja!= string::npos)
+            {
+                int ZnalezioneImie = pozycja;
+
+                cout<<adresaci[i].imie<<endl;
+                cout<<adresaci[i].nazwisko<<endl;
+                cout<<adresaci[i].adres<<endl;
+                cout<<adresaci[i].email<<endl;
+                cout<<adresaci[i].nrTel<<endl;
+                cout<<endl;
+                iloscZnalezionychOsob++;
+            }
         }
     }
     if (iloscZnalezionychOsob==0)
@@ -139,23 +142,26 @@ void wyszukajPoImieniu (string wyszukiwaneImie, vector<Adresat> &adresaci)
     getch();
 }
 
-void wyszukajPoNazwisku (string wyszukiwaneNazwisko, vector<Adresat> &adresaci)
+void wyszukajPoNazwisku (string wyszukiwaneNazwisko, vector<Adresat> &adresaci, int IDuzytkownika)
 {
     int iloscZnalezionychOsob=0;
     for(int i=0; i<adresaci.size(); i++)
     {
-        size_t pozycja = adresaci[i].nazwisko.find(wyszukiwaneNazwisko);
-
-        if(pozycja!= string::npos)
+        if (adresaci[i].idUzytkownika==IDuzytkownika)
         {
-            int ZnalezioneNazwisko = pozycja;
-            cout<<adresaci[i].imie<<endl;
-            cout<<adresaci[i].nazwisko<<endl;
-            cout<<adresaci[i].adres<<endl;
-            cout<<adresaci[i].email<<endl;
-            cout<<adresaci[i].nrTel<<endl;
-            cout<<endl;
-            iloscZnalezionychOsob++;
+            size_t pozycja = adresaci[i].nazwisko.find(wyszukiwaneNazwisko);
+
+            if(pozycja!= string::npos)
+            {
+                int ZnalezioneNazwisko = pozycja;
+                cout<<adresaci[i].imie<<endl;
+                cout<<adresaci[i].nazwisko<<endl;
+                cout<<adresaci[i].adres<<endl;
+                cout<<adresaci[i].email<<endl;
+                cout<<adresaci[i].nrTel<<endl;
+                cout<<endl;
+                iloscZnalezionychOsob++;
+            }
         }
     }
     if (iloscZnalezionychOsob==0)
@@ -185,7 +191,7 @@ void wyswietlWszystkieOsoby (vector<Adresat> &adresaci, int IDuzytkownika)
                 cout<<endl;
             }
         }
-         getch();
+        getch();
     }
 }
 
@@ -476,7 +482,7 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik>
             cout<<"Wpisz wyszukiwane imie: ";
             cin>>wyszukiwaneImie;
 
-            wyszukajPoImieniu (wyszukiwaneImie,adresaci);
+            wyszukajPoImieniu (wyszukiwaneImie,adresaci, IDzalogowanegoUzytkownika);
 
         }
         break;
@@ -487,7 +493,7 @@ int przejdzDoKsiazkiAdresowej (int IDzalogowanegoUzytkownika, vector<Uzytkownik>
             cout<<"Wpisz wyszukiwane nazwisko: ";
             cin>>wyszukiwaneNazwisko;
 
-            wyszukajPoNazwisku (wyszukiwaneNazwisko,adresaci);
+            wyszukajPoNazwisku (wyszukiwaneNazwisko,adresaci, IDzalogowanegoUzytkownika);
         }
         break;
         case '4':
