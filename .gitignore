@@ -1,2 +1,6 @@
 *.depend
 *.layout
+Uzytkownicy.txt
+Adresaci.txt
+bin/
+obj/
